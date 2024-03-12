@@ -89,6 +89,9 @@ public:
 
 	float GetVolume() override { return volume; }
 	void Scale(float scaleFactor) override { volume = volume * scaleFactor; }
+        void ShowInfo() override { std::cout << "TriangularPyramid with height: " << height << "and baseTriangle:\n";
+	baseTriangle.ShowInfo();
+}
 	std::string GetName() override { return "TriangularPyramid"; }
 	bool operator>(Shape3D& other) override { return volume > other.GetVolume(); }
 	bool operator<(Shape3D& other) override { return volume < other.GetVolume(); }
@@ -105,6 +108,10 @@ public:
 
 	float GetVolume() override { return volume; }
 	void Scale(float scaleFactor) override { volume = volume * scaleFactor; }
+        void ShowInfo() override {
+	std::cout << "Cylinder with height:" << height << "and baseCircle:\n";
+	baseCircle.ShowInfo();
+}
 	std::string GetName() override { return "Cylinder"; }
 	bool operator>(Shape3D& other) override { return volume > other.GetVolume(); }
 	bool operator<(Shape3D& other) override { return volume < other.GetVolume(); }
@@ -120,6 +127,7 @@ public:
 
 	float GetVolume() override { return volume; }
 	void Scale(float scaleFactor) override { volume = volume * scaleFactor; }
+        void ShowInfo() override { std::cout << "Sphere with radius" << radius << std::endl; }
 	std::string GetName() override { return "Sphere"; }
 	bool operator>(Shape3D& other) override { return volume > other.GetVolume(); }
 	bool operator<(Shape3D& other) override { return volume < other.GetVolume(); }
