@@ -1,4 +1,4 @@
-﻿
+
 #include <iostream>
 #include <string>
 
@@ -37,14 +37,26 @@ private:
 public:
 	Square(float s) :side(s) {} //Constructor
 
-	float GetArea() override { return area; }
-	void Scale(float scaleFactor) override { area = area * scaleFactor; }
-	void ShowInfo() override { std::cout << "Square with side: " << side << std::endl; }
-	std::string GetName() override { return "Square"; }
+	float GetArea() override { 
+		return area;
+	}
+	void Scale(float scaleFactor) override {
+		area = area * scaleFactor;
+	}
+	void ShowInfo() override { 
+		std::cout << GetName() << std::endl;
+		std::cout << "side: " << side << std::endl;
+		std::cout << "area: " << GetArea() << std::endl << std::endl;
+	}
+	std::string GetName() override { 
+		return "Square";
+	}
 	bool operator>(Shape2D& other) override { return area > other.GetArea(); }
 	bool operator<(Shape2D& other) override { return area < other.GetArea(); }
 	bool operator==(Shape2D& other) override { return area == other.GetArea(); }
-	void CalculateArea() override { area = side * side; }
+	void CalculateArea() override {
+		area = side * side;
+	}
 };
 
 class Triangle : public Shape2D {
@@ -54,14 +66,23 @@ private:
 public:
 	Triangle(float b, float h) : base(b), height(h) {} // Constructor
 
-	float GetArea() override { return area; }
+	void CalculateArea() override { 
+		area = 0.5 * base * height;
+	}
+	float GetArea() override { 
+		return area;
+	}
 	void Scale(float scaleFactor) override { area = area * scaleFactor; }
-	void ShowInfo() override { std::cout << "Triangle with base: " << base << " and height: " << height << std::endl; }
-	std::string GetName() override { return "Triangle"; }
+	void ShowInfo() override { 
+		std::cout << GetName() << std::endl;
+		std::cout << "Triangle with base: " << base << " and height: " << height << "and area " << this->GetArea() << std::endl << std::endl;
+	}
+	std::string GetName() override { 
+		return "Triangle";
+	}
 	bool operator>(Shape2D& other) override { return area > other.GetArea(); }
 	bool operator<(Shape2D& other) override { return area < other.GetArea(); }
 	bool operator==(Shape2D& other) override { return area == other.GetArea(); }
-	void CalculateArea() override { area = 0.5 * base * height; }
 };
 
 class Circle : public Shape2D {
@@ -70,33 +91,61 @@ private:
 public:
 	Circle(float r) : radius(r) {} // Constructor
 
-	float GetArea() override { return area; }
-	void Scale(float scaleFactor) override { area = area * scaleFactor; }
-	void ShowInfo() override { std::cout << "Circle with radius: " << radius << std::endl; }
-	std::string GetName() override { return "Circle"; }
-	bool operator>(Shape2D& other) override { return area > other.GetArea(); }
-	bool operator<(Shape2D& other) override { return area < other.GetArea(); }
-	bool operator==(Shape2D& other) override { return area == other.GetArea(); }
-	void CalculateArea() override { area = 3.141592 * radius * radius; }
+	void CalculateArea() override { 
+		area = 3.141592 * radius * radius;
+	}
+	float GetArea() override {
+		return area;
+	}
+	void Scale(float scaleFactor) override {
+		area = area * scaleFactor;
+	}
+	void ShowInfo() override { 
+		std::cout << GetName() << std::endl;
+		std::cout << "Circle with radius: " << radius << " and area" << this->GetArea() << std::endl << std::endl;
+	}
+	std::string GetName() override { 
+		return "Circle";
+	}
+	bool operator>(Shape2D& other) override { 
+		return area > other.GetArea();
+	}
+	bool operator<(Shape2D& other) override { 
+		return area < other.GetArea();
+	}
+	bool operator==(Shape2D& other) override { 
+		return area == other.GetArea();
+	}
 };
 
 class TriangularPyramid : public Shape3D {
 private:
-	float height;
+	float triangleHeight;
 	Triangle baseTriangle;
 public:
-	TriangularPyramid(float h, float base, float triangleHeight) : height(h), baseTriangle(base, triangleHeight) {} // Constructor
-
-	float GetVolume() override { return volume; }
-	void Scale(float scaleFactor) override { volume = volume * scaleFactor; }
-        void ShowInfo() override { std::cout << "TriangularPyramid with height: " << height << "and baseTriangle:\n";
-	baseTriangle.ShowInfo();
-}
-	std::string GetName() override { return "TriangularPyramid"; }
+	TriangularPyramid(float triangleHeight, float base, float height) : triangleHeight(triangleHeight), baseTriangle(base, height) {} // Constructor
+	
+	void CalculateVolume() override { 
+		baseTriangle.CalculateArea();
+		volume = (1.0 / 3.0) * baseTriangle.GetArea() * triangleHeight;
+	}
+	float GetVolume() override { 
+		return volume;
+	}
+	void Scale(float scaleFactor) override { 
+		volume = volume * scaleFactor;
+	}
+	void ShowInfo() override {
+		CalculateVolume();
+		std::cout << GetName() << std::endl;
+		std::cout << "TriangularPyramid with height: " << triangleHeight << " and volume: " << this->GetVolume() << std::endl << std::endl;
+	}
+	std::string GetName() override {
+		return "TriangularPyramid";
+	}
 	bool operator>(Shape3D& other) override { return volume > other.GetVolume(); }
 	bool operator<(Shape3D& other) override { return volume < other.GetVolume(); }
 	bool operator==(Shape3D& other) override { return volume == other.GetVolume(); }
-	void CalculateVolume() override { volume = (1.0 / 3.0) * baseTriangle.GetArea() * height; }
 };
 
 class Cylinder : public Shape3D {
@@ -105,18 +154,28 @@ private:
 	Circle baseCircle;
 public:
 	Cylinder(float h, float r) : height(h), baseCircle(r) {} // Constructor
+	void CalculateVolume() override { 
+		baseCircle.CalculateArea();
+		volume = baseCircle.GetArea() * height;
+	}
 
-	float GetVolume() override { return volume; }
-	void Scale(float scaleFactor) override { volume = volume * scaleFactor; }
-        void ShowInfo() override {
-	std::cout << "Cylinder with height:" << height << "and baseCircle:\n";
-	baseCircle.ShowInfo();
-}
-	std::string GetName() override { return "Cylinder"; }
+	float GetVolume() override { 
+		return volume;
+	}
+	void Scale(float scaleFactor) override { 
+		volume = volume * scaleFactor;
+	}
+	void ShowInfo() override {
+		CalculateVolume();
+		std::cout << GetName() << std::endl;
+		std::cout << "Cylinder with height:" << height << " and volume: " << GetVolume() << std::endl << std::endl;
+	}
+	std::string GetName() override { 
+		return "Cylinder";
+	}
 	bool operator>(Shape3D& other) override { return volume > other.GetVolume(); }
 	bool operator<(Shape3D& other) override { return volume < other.GetVolume(); }
 	bool operator==(Shape3D& other) override { return volume == other.GetVolume(); }
-	void CalculateVolume() override { volume = baseCircle.GetArea() * height; }
 };
 
 class Sphere : public Shape3D {
@@ -125,43 +184,57 @@ private:
 public:
 	Sphere(float r) : radius(r) {} // Constructor
 
-	float GetVolume() override { return volume; }
-	void Scale(float scaleFactor) override { volume = volume * scaleFactor; }
-        void ShowInfo() override { std::cout << "Sphere with radius" << radius << std::endl; }
-	std::string GetName() override { return "Sphere"; }
-	bool operator>(Shape3D& other) override { return volume > other.GetVolume(); }
-	bool operator<(Shape3D& other) override { return volume < other.GetVolume(); }
+	float GetVolume() override { 
+		return volume;
+	}
+	void Scale(float scaleFactor) override { 
+		volume = volume * scaleFactor;
+	}
+	void ShowInfo() override {
+		std::cout << GetName() << std::endl;
+		std::cout << "Sphere with radius: " << radius << " and volume: " << GetVolume()  << std::endl;
+	}
+	std::string GetName() override { 
+		return "Sphere";
+	}
+	bool operator>(Shape3D& other) override { 
+		return volume > other.GetVolume();
+	}
+	bool operator<(Shape3D& other) override { 
+		return volume < other.GetVolume();
+	}
 	bool operator==(Shape3D& other) override { return volume == other.GetVolume(); }
-	void CalculateVolume() override { volume = (4.0 / 3.0) * 3.141592 * radius * radius * radius; }
+	void CalculateVolume() override { 
+		volume = (4.0 / 3.0) * 3.141592 * radius * radius * radius;
+	}
 };
 
 int main() {
-	Square square(3);
-	square.CalculateArea();
-	square.ShowInfo();
-	std::cout << "Area:" << square.GetArea() << std::endl;
+	Square sq(3.0);
+	sq.CalculateArea();
+	sq.ShowInfo();
 
-	Triangle triangle(2, 6);
-	triangle.CalculateArea();
-	triangle.ShowInfo();
-	std::cout << "Area:" << triangle.GetArea() << std::endl;
+	Triangle tr(2, 5);
+	tr.CalculateArea();
+	tr.ShowInfo();
 
-	Circle circle(5);
-	circle.CalculateArea();
-	circle.ShowInfo();
-	std::cout << "Area:" << circle.GetArea() << std::endl;
+	Circle cr(5);
+	cr.CalculateArea();
+	cr.ShowInfo();
 
 	TriangularPyramid pyramid(6, 5, 4);
 	pyramid.CalculateVolume();
-	std::cout << "Volume of TriangularPyramid: " << pyramid.GetVolume() << std::endl;
+	pyramid.ShowInfo();
+	
+	Cylinder cyl(7, 2);
+	cyl.CalculateVolume();
+	cyl.ShowInfo();
+	
 
-	Cylinder cylinder(7, 2);
-	cylinder.CalculateVolume();
-	std::cout << "Volume of Cylinder: " << cylinder.GetVolume() << std::endl;
-
-	Sphere sphere(4);
-	sphere.CalculateVolume();
-	std::cout << "Volume of Sphere: " << sphere.GetVolume() << std::endl;
+	Sphere sp(4);
+	sp.CalculateVolume();
+	sp.ShowInfo();
+	
 
 	return 0;
 }
